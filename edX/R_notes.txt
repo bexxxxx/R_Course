@@ -1,0 +1,53 @@
+git remote set-url origin https://github.com/bexxxxx/R.git
+
+_______________________________________________________
+INTRODUCTION
+exp()
+assignment: x<-100
+options(digits=22)
+NaN means not a number
+Inf is an R object that means infinity
+'c' function concatenates things into one object
+ls() lists all r objects in the working memory
+rm() can remove objects from working memory
+?(mean) is shorthand for help with the function
+example(mean)
+# We start the list of random numbers at the position 123
+set.seed(123)
+_______________________________________________________
+FUNCTIONS AND DATA STRUCTURES
+functions establish relationships between input and output
+
+Data Structures:
+single values
+  logical: true or false
+  single numbers
+  characters
+vectors
+  of numbers
+  of logicals
+  of characters
+  *cannot combine
+  factor: pre specified set of levels (possible values)
+    generate with gl function
+    or use as.factor() on vector of characters
+matrices
+  can only contain one data type
+array
+data frame
+  as.data.frame()
+lists
+  elements can be different types and lengths
+
+Functions:
+sin() input number output number
+integrate() input funcation and range, output list
+plot() input vector, output NULL
+"+"() input 2 numbers, output 1 number
+paste() input character objects, output 1 character object
+create:
+standard.val.function<- function(x){(x-mean(x))/sd(x)}
+
+Simple Plotting and Scripting:
+to execute script use: source("locationofRfile/xxx.R")
+_______________________________________________________
