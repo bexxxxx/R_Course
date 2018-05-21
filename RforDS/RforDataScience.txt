@@ -1,0 +1,19 @@
+git remote set-url origin https://github.com/bexxxxx/R.git
+
+You only need to install a package once, but you need to reload it every time
+If we need to be explicit about where a function (or dataset) comes from,
+we’ll use the special form package::function()
+
+A data frame is a rectangular collection of variables (in the columns) and observations (in the rows).
+mpg contains observations collected by the US Environment Protection Agency on 38 models of car.
+
+To plot mpg, run this code to put displ on the x-axis and hwy on the y-axis:
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+ggplot(data = mpg) creates an empty graph
+geom_point() adds a layer of points to your plot
+
+ggplot(data = <DATA>) +
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
