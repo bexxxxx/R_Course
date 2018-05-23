@@ -1,30 +1,47 @@
-SECTION 1
+# SECTION 1
 getwd()
-  get working directory, find out where R is looking
+  # get working directory, find out where R is looking
 setwd(/Users/RebeccaReilly")
-or command D
+# or command D
+ls() lists the contents of this workspace.
+rm(<var_name>) allows you to remove objects from the workspace again.
+
+class(some_variable_name) to check var type
+as.character() to convert
+  character/logical/numeric
+is.character() to check if character
+
+numeric_vector <- c(1, 10, 49)
+  boolean/character
+
+# names() function to name the elements of a vector
+  some_vector <- c("Johnny", "Poker Player")
+  names(some_vector) <- c("Name", "Profession")
 _______________________________________________________
-object and variables
+# object and variables
 x <- 4
 my.height <- 5*12 + 4
 
-hit up arrow in command line to see previous commands
+# hit up arrow in command line to see previous commands
 _______________________________________________________
-vector: single set of values in an order
+# vector: single set of values in an order
 v <- c(2, 4, 6, 8)
-vector of length 1 is equivalent to a scalar
+# vector of length 1 is equivalent to a scalar
 v[1] shows us first element of the vector
 
 look.at<- 1:3
-  creates a vector of 1 2 3
+  # creates a vector of 1 2 3
 v[look.at] shows us first 3 values of v
 
-length indicates number of elements in a vector
-head returns first 6 observations
-tail returns last 6 observations
+# length indicates number of elements in a vector
+# head returns first 6 observations
+# tail returns last 6 observations
   tail(v, 3) gives us the last 3 of the last of values
+
+# logical:
+poker_better <- poker_vector > roulette_vector
 _______________________________________________________
-strings: character objects
+# strings: character objects
 v <- c("one", "lady gaga")
 boolean vectors
   c(TRUE, FALSE, TRUE)
@@ -34,17 +51,18 @@ v[under.10] will give us the obs in v with values <10
 _______________________________________________________
 v <- c(10, 20, 30, 40, 50, 60)
 v + 1 adds 1 to every observations
+total <- sum(v)
 
 w <- 2:7
 v*w gives us element wise vector multiplication
   v1*W1 V2*W2 ...
-SAME WAY WITH ADD/SUBT/DIV
+# SAME WAY WITH ADD/SUBT/DIV
 
-vectors of different lengths
+# vectors of different lengths
   w <- c(5, 10)
   v*w
   output: 50, 200, 150, 400, 250, 600
-R recycles vector w to complete multiplication
+# R recycles vector w to complete multiplication
 
 w <- seq(5, 20, 5)
   where sequence starts, where seq ends, how far to jump
@@ -56,10 +74,59 @@ v^2
 p <- 2:7
 v^p
 sqrt(v)
+
+# Subsetting vectors:
+select multiple elements by passing a vector inside the brackets
+poker_vector[c(1,5)] gives 1st and 5th elements
+# selection by index
+poker_vector[c(1,3)]
+
+# selection by name
+poker_vector[c("Monday", "Wednesday")]
+
+# selection by logicals
+poker_vector[c(TRUE, FALSE, TRUE, FALSE, FALSE)]
+
+< for less than
+> for greater than
+<= for less than or equal to
+>= for greater than or equal to
+== for equal to each other
+!= not equal to each other< for less than
+> for greater than
+<= for less than or equal to
+>= for greater than or equal to
+== for equal to each other
+!= not equal to each other
+
+selection_vector <- poker_vector > 0
+
+can also use sum() on a logical vector;
+it simply counts the number of vector elements that are TRUE
+
+# Count number of times player < 18: n_low_score
+n_low_score <- sum(player < 18)
+
+# Select the scores where player exceeds house: winning_scores
+winning_scores <- player[player > house]
 _______________________________________________________
-creating matrix: start with vector
+#creating matrix: start with vector
 v <- 1:12
 matrix(v, nrow=3, ncol=4)
+
+rbind() function to paste together different vectors as if they were rows of a matrix
+
+rownames(my_matrix) <- row_names_vector
+colnames(star_wars_matrix) <- c("US", "non-US")
+
+#constructs a matrix with the number 1 up to 9, filled row by row:
+matrix(1:9, byrow = TRUE, nrow = 3)
+
+#Another way to name my_matrix
+col <- c("US", "non-US")
+row <- c("A New Hope", "The Empire Strikes Back", "Return of the Jedi")
+star_wars_matrix <- matrix(c(new_hope, empire_strikes, return_jedi),
+                           byrow = TRUE, nrow = 3, dimnames = list(row, col))
 
 matrix(0, 3, 4) all zeros
 
@@ -69,14 +136,43 @@ dim(m) gives us num of rows and columns
 length(m) # elements in entire matrix
 head(m) up to six rows in top of matrix
 tail(m) up to six rows in bottom of matrix
+rowSums() calculates the totals for each row of a matrix.
+colSums()
+cbind(matrix 1, vector 1) merges matrices and/or vectors together by column
 
 tail(m, 1) changes # of rows we get back
+all_wars_matrix <- rbind(star_wars_matrix, star_wars_matrix2) gives us 6 rows
 
-select 1 or more elements of matrix
+#select 1 or more elements of matrix
   m <- matrix(1:12, 3, 4)
   m[2,4] element in 2nd row and 4th column
   m[2, ] get all columns
   m[1:2, 4] rows 1 and 2, column 4
   m[1:2, 3:4] gives us sub matrix
+  m[c(1,4), c(2,3)]
+  star_wars_matrix[c("Return of the Jedi","The Empire Strikes Back"),c("US", "non-US") ]
+    same as: star_wars_matrix[c(FALSE, TRUE, TRUE), ]
+
+matrix multiplication:  %*%
 _______________________________________________________
 SECTION 2
+getwd()
+setwd()
+list.files()
+
+state <- read.csv("state.csv")
+  csv files saved as data matrix, also called data frame
+dim(state)
+length(state) gives number of elements/columns
+
+names(state) used to access variable names
+state$smoke extract entire variable
+  dataset$variablename
+mean(state$smoke)
+high.smoking <- subset(state, smoke < 25)
+high.smoking <- subset(state, smoke > 25, select=c("abbr", "smoke"))
+
+state$pres12
+#Data frames can hold diff type of var in each column
+#Factor object: blend of character and numerical, no "xx"
+convert by as.character(state$pres12)
