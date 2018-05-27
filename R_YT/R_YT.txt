@@ -155,6 +155,409 @@ all_wars_matrix <- rbind(star_wars_matrix, star_wars_matrix2) gives us 6 rows
 
 matrix multiplication:  %*%
 _______________________________________________________
+factor() encode a vector as an unordered factor
+str() Have a look at the underlying structure
+
+my_vector <- c("L", "S", "L", "M", "M")
+
+# Option 1, levels must be passed in alphabetical order
+my_factor <- factor(my_vector)
+levels(my_factor) <- c("Large", "Medium", "Small")
+
+# Option 2
+my_factor <- factor(my_vector,
+                    levels = c("S", "M", "L"),
+                    labels = c("Small", "Medium", "Large"))
+
+summary(some_variable) a quick overview of some_variable
+
+# To create an ordered factor, you have to add two additional arguments: ordered and levels
+factor(some_vector,
+       ordered = TRUE,
+       levels = c("Level_1", "Level_2" ...))
+
+# Prespecification of levels and labels
+lvls <- c("eco", "bus", "fir")
+lbls <- c("economy", "business", "first")
+# Encode fly_class as a factor, with the appropriate names and ordering
+fly_class_factor <- factor(fly_class, ordered = TRUE, levels = lvls, labels = lbls)
+
+# can create vector, create ordered factor of that vector, then compare elements of the vector
+_______________________________________________________
+# Lists
+
+# gather a variety of objects in an ordered way
+# These objects can be matrices, vectors, factors, data frames, even other lists, etc.
+# It is not even required that these objects are related to each other
+
+my_list <- list(my_vector, my_matrix, my_factor)
+
+my_list <- list(name1 = your_comp1,
+                name2 = your_comp2)
+
+my_list <- list(your_comp1, your_comp2)
+names(my_list) <- c("name1", "name2")
+
+shining_list <- list(title = "The Shining", actors = actors_vector, reviews = reviews_factor)
+
+#To select a single element from a list
+shining_list[[1]]
+shining_list[["title"]]
+shining_list$title
+
+# selection with single square brackets, you'll end up with
+#another list that contains the specified elements
+shining_list[c(2,3)]
+shining_list[c(F,T,T)]
+  List of 2
+  $ actors : chr [1:5] "Jack Nicholson" "Shelley Duvall" "Danny Lloyd" "Scatman Crothers" ...
+  $ reviews: Ord.factor w/ 4 levels "Bad"<"OK"<"Good"<..: 3 2 3 4 1 4 3
+
+shining_list[[2]][1]
+# you select from the second component, actors (shining_list[[2]]), the first element ([1]).
+
+# extend list
+shining_list$my_opinion <- "Love it!"
+shining_list[["my_opinion"]] <- "Love it!"
+shining_list <- c(shining_list, my_opinion = "Love it!")
+
+# extend a list with multiple elements at the same time
+c(shining_list,
+  list(my_opinion = "Love it!",
+       your_opinion = "Hate it!"))
+
+# add an entire vector as an element to the list
+c(shining_list,
+  list(c("Love it!", "Hate it!")))
+_______________________________________________________
+                vector matrix factor  list
+1D              TRUE  FALSE   TRUE  TRUE
+heterogeneous  FALSE  FALSE  FALSE  TRUE
+subsetting      TRUE   TRUE   TRUE  TRUE
+arithmetic      TRUE   TRUE  FALSE FALSE
+_______________________________________________________
+# Data frame
+# first thing that you do when receiving a new data set or data frame
+str()
+
+data.frame(vec1, vec2, ..., stringsAsFactors = FALSE)
+# stringsAsFactors avoids that R automatically converts character vectors to factors
+
+data.frame(name1 = vec1, name2 = vec2, ...)
+
+# name a data frame after creating it:
+my_df <- data.frame(vec1, vec2, ...)
+names(my_df) <- c("name1", "name2", ...)
+
+# Similar to matrices, you select elements from a data frame with [ ]
+earth_data <- planets_df[3, c("diameter", "rotation")]
+
+# entire column
+my_df$col_name
+
+planets_df[planets_df$has_rings == TRUE, ]
+OR
+subset(planets_df, subset = has_rings == TRUE)
+# in the subset() version, you do not need to use the $ notation to refer to has_rings
+
+# add variable/column
+my_df$new_column <- my_vec
+my_df[["new_column"]] <- my_vec
+my_df <- cbind(my_df, new_column = my_vec)
+
+# The rbind() function is capable of pasting together two data frames.
+# The merge can only be successful when the names (a, b, c) of both the data frames match, otherwise an error occurs.
+my_df1 <- data.frame(a = 1, b = 2, c = 3)
+my_df2 <- data.frame(a = 8, b = 9, c = 10)
+uber_df <- rbind(my_df1, my_df2)
+
+# order() is a function that gives you the ranked position of each element when it is applied on a variable
+# order() returns the ranked element's position in the original list
+a <- c(100,9,101)
+order(a) returns the vector containing 2, 1 and 3
+a[order(a)] returns the ordered vector (9, 100, 101)
+
+positions <- order(planets_df[,"diameter"], decreasing = TRUE)
+
+# EXAMPLE
+# Remove economic variables and add population
+countries_df_dem <- countries_df[ , c(1, 2, 5)]
+countries_df_dem$population <- population
+
+# Add brazil
+names(brazil) <- c("name", "continent", "has_president", "population")
+countries_df2 <- rbind(countries_df_dem, brazil)
+
+# Sort by population
+countries_df2[order(countries_df2$population, decreasing = TRUE), ]
+_______________________________________________________
+# Basic Graphics
+
+plot()
+  factors --> bar chart
+  vectors --> first argument on X, 2nd on Y
+plot(movies$genre)
+
+# plot() with a single argument, you'll get an index plot
+# two arguments you'll get a classical scatterplot.
+
+hist(movies$runtime, breaks = "Sturges")
+# By default, the "Sturges" algorithm is used to automatically determine the number of bins
+
+boxplot()
+
+table <- table(movies$genre)
+pie(table)
+
+# Subset the dateframe and plot it entirely
+plot(movies[,c("rating", "votes", "runtime")] )
+
+# Subset salaries: salaries_educ
+salaries_educ <- salaries[salaries$degree == 2, ]
+
+# Add the exp vector as a column experience to salaries
+salaries$experience <- exp
+_______________________________________________________
+# Customize Plots
+plot(movies$votes, movies$runtime, main = "Votes versus Runtime",
+      xlab = "Number of votes [-]", ylab = "Runtime [s]",
+      sub = "No clear correlation")
+# main = title, sub = subtitle
+
+pch --> change the dots to different plot symbols
+
+col = 1, col = "black", and col = "#000000"
+
+# comprehensive list of graphical parameters in the documentation of par()
+
+plot(movies$votes, movies$runtime,
+       main = "Votes versus Runtime",
+       xlab = "Number of votes [-]",
+       ylab = "Runtime [s]",
+       sub = "No clear correlation",
+       pch = 9,
+       col = "#dd2d2d",
+       col.main = 604)
+
+option	     description
+cex	number    indicating the amount by which plotting text and symbols should be scaled relative to the default. 1=default, 1.5 is 50% larger, 0.5 is 50% smaller, etc.
+cex.axis	    magnification of axis annotation relative to cex
+cex.lab	      magnification of x and y labels relative to cex
+cex.main	    magnification of titles relative to cex
+cex.sub	      magnification of subtitles relative to cex
+_______________________________________________________
+# Multiple Plots
+
+par(mfrow = c(1,2)) # a grid of 1 row and 2 columns
+par(mfcol= c(1,2)) # graphs added in column-wise
+# to reset: par(mfrow = c(1,1))
+
+layout() # allows you to specify more complex plot, expects matrix in which
+          # you specify the location on the output device
+
+> grid <- matrix(c(1, 1, 2, 3), nrow = 2, ncol = 2, byrow = TRUE)
+> grid
+    [,1] [,2]
+[1,]    1    1
+[2,]    2    3
+> layout(grid)
+
+# reset the grid
+> layout(1)
+OR
+> par(mfcol = c(1,1))
+
+# stack graphical elements
+movies_lm <- lm(movies$rating ~ movies$votes)
+abline(coef(lm_sales), lwd = 2)
+# can take the coefficients of a straight line as a vector or sep. values
+# lwd stands for line width
+
+points()
+lines() # must order first
+segments()
+text()
+lm() function allows you to model the relationship between 2 variables
+# cannot remove elements from  plot, must start over
+
+# EXAMPLE ****
+
+# Fit a linear regression
+movies_lm <- lm(movies$rating ~ movies$votes)
+
+# Customize scatterplot
+plot(movies$votes, movies$rating, main = "Analysis of IMDb data", xlab = "Number of Votes", ylab = "Rating", col = "darkorange", pch = 15, cex = .7)
+
+# Customize straight line
+abline(coef(movies_lm), lwd = 2, col = "red")
+
+# Add text
+xco <- 7e5
+yco <- 7
+text(xco, yco, lab = "More votes? Higher rating!")
+_______________________________________________________
+# Importing and Summarizing Data
+
+# Load tidyverse
+library(tidyverse)
+
+# Read in the data
+taxis <- read_csv("/usr/local/share/datasets/taxis.csv")
+
+# Explore the data
+head(taxis)
+
+# Take a glimpse at your data
+glimpse(taxis)
+
+# Check out the structure of your data
+str(taxis)
+
+# Summarize your data
+summary(taxis)
+
+# Create total_amount_col
+total_amount_col <- taxis[,"total_amount"]
+
+# Extract the 125th row
+row_125 <- taxis[125,]
+
+# Find passenger_count_1031
+passenger_count_1031 <- taxis[1031, "passenger_count"]
+
+# Find the 25th, 50th, and 75th percentiles of trip_distance
+quantile(taxis$trip_distance, c(.25, .50, .75))
+
+sapply(my_list, length) #apply the function length() to each element of the list
+# first is the object you want to apply a function to and the second argument is the function you want to apply
+
+# Find the numeric columns
+numeric_cols <- sapply(taxis, is.numeric)
+numeric_cols
+
+# Create taxis_numeric
+taxis_numeric <- taxis[, numeric_cols]
+
+# Find means of all numeric columns
+all_means <- sapply(taxis_numeric, mean)
+all_means
+
+# define your own function in R, you'll use the syntax
+function_name <- function(args, more_args) {
+    ...
+}
+# ... is replaced with whatever operations using args
+
+# Find the correlation between trip_distance and total_amount
+cor(taxis$trip_distance, taxis$total_amount)
+_______________________________________________________
+# Manipulating Data
+
+dplyr package
+  has five main functions, or "verbs", that each correspond to a common data manipulation task.
+  select() selects columns from your dataframe and returns another dataframe
+  %>% doing away with nested function calls taxis %>% select()
+taxis_geo <- taxis %>% select(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, trip_distance)
+# all dplyr functions, the first argument is the dataframe and subsequent arguments are the names of the columns you want
+
+select(-column) to get rid of columns
+taxis_smaller <- taxis %>%
+  select(-VendorID, -rate, -store_and_fwd_flag)
+
+# Create taxis_numeric
+taxis_numeric <- taxis %>% select_if(is.numeric)
+# instead of passing the names of columns in, you pass in a function that that is run on each column and that evaluates to TRUE or FALSE
+# Output the correlation matrix
+cor(taxis_numeric)
+
+mutate() #creating a few columns you're interested in examining, but aren't present in your original dataset
+# first argument of the function mutate() is the dataframe that you're working with. Subsequent arguments have the form new_col_name = new_col_expr
+
+# Add trip_distance_kms
+taxis_with_kms <- taxis %>%
+  mutate(trip_distance_kms = trip_distance * 1.609)
+
+# Add cost_per_mile
+taxis_with_cost_mile <- taxis %>%
+  mutate(cost_per_mile = total_amount / trip_distance)
+
+hav_dist() #computes distance using the Haversine formula
+
+# Create my_distance and diff
+taxis_my_dist <- taxis  %>%
+  mutate(my_distance = hav_dist(pickup_longitude,
+                                pickup_latitude,
+                                dropoff_longitude,
+                                dropoff_latitude),
+         diff = trip_distance - my_distance)
+
+# Find the min and the max of my_distance
+min(taxis_my_dist$diff)
+max(taxis_my_dist$diff)
+
+filter()
+# Create taxis_standard_rate
+taxis_standard_rate <- filter(taxis, rate == "Standard rate")
+
+# Check the size of the dataframes
+dim(taxis)
+dim(taxis_standard_rate)
+
+# Filter taxis
+taxis_groups <- taxis %>%
+  filter(passenger_count > 1)
+
+group_by(), which groups the data; takes a dataframe and names of columns that define groups
+summarize() which summarizes the groups; need expression that aggregates the rows of the data to a single value
+
+# Group and summarize the data
+taxis %>% group_by(passenger_count) %>%
+  summarize(n = n(), mean_cost = mean(total_amount))
+_______________________________________________________
+# Visualizing Data
+
+#The function ggplot() with the data as the first argument.
+#The second argument is a set of aesthetic mappings.
+#These are arguments to the aes() function and take the form aesthetic = variable.
+#The most common aesthetics you'll want to include are x and y.
+#These map data points to positions on the x and y-axes
+
+geom_point() draws a point and geom_line() draws a line.
+geoms are added to plots using the + sign
+
+ggplot(my_data, aes(x = x_coord, y = y_coord)) +
+  geom_point()
+
+# Plot a histogram of total fares
+ggplot(taxis,aes(x = total_amount)) +
+    geom_histogram()
+
+# Filter the data
+taxis_tolls <- filter(taxis, tolls_amount > 0)
+
+# Plot a histogram of tolls
+ggplot(taxis_tolls, aes(x = tolls_amount)) +
+      geom_histogram()
+
+# Create a scatter plot
+ggplot(taxis, aes(x = trip_distance, y = total_amount)) +
+      geom_point()
+
+# facet_wrap() to facet according to a single variable
+  facet_wrap(~ rate)
+# Plot the faceted histogram
+  ggplot(taxis, aes(x = total_amount)) +
+    geom_histogram() +
+    facet_wrap(~ passenger_count)
+# facet_grid() to create a facet for each combination of the levels of two categorical variables.
+# This time you just pass in a formula with one variable before the ~ (tilde) and one after
+
+# Plot the faceted histogram
+ggplot(taxis, aes(total_amount)) +
+  geom_histogram() +
+  facet_grid(rate ~ passenger_count, scales = "free_y")
+
+_______________________________________________________
 SECTION 2
 getwd()
 setwd()
